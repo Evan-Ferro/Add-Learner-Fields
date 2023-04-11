@@ -2,8 +2,8 @@
 /*
 Plugin Name:  Add Learner Fields
 Description:  Adding Learner fields within the checkout page to give companies an option to provide information on who they are purchasing for. 
-Version:      1.0
-Author:       NMI
+Version:      1.01
+Author:       Northeast Maritime Institute
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -26,9 +26,10 @@ function custom_checkout_fields_before_billing_details($order){
 
 		echo '<div id="learner_information_field">';
 
-		echo '<h3>' . __('Learner Information') . '</h3>';
+		echo '<h3 class="learner-header">' . __('Learner Information') . '</h3>';
 		echo '<p>' . __("Please make sure to fill in the fields below with the information of the individual(s) taking the course(s). If you do not know all of the required information for your Learner(s), please contact our Registrar's office. If you are purchasing courses for more than one person, please 	ensure that you include the information of all students.") . '</p>';
-		echo '<p>' . __('*If you are purchasing for multiple individuals on behalf of a company, we recommend that you reach out to our Registrar to complete your purchase so we can provide the best service possible. To contact our Registrar, please email <b>registration@northeastmartime.com </b> or call <b>(508) 992-4025</b>.') . '</p>';
+		echo '<p id="firstText" class="learner-text hide-text no-display">' . __('If you are purchasing for multiple individuals on behalf of a company, we recommend that you reach out to our Registrar to complete your purchase so we can provide the best service possible. To contact our Registrar, please email <b>registration@northeastmartime.com </b> or call <b>(508) 992-4025</b>.') . '</p>';
+	echo '<p id="secondText" class="learner-text hide-text no-display">' . __('*If a User is taking more than one Course, please separate Courses by a comma.') . '</p>';
 	
 		for ($l = 0 ; $l < $learner_num; $l++){ 
 			echo '<h3 id="learner_counter">' . __('Learner ') . __($l + 1) . '</h3>';
@@ -135,7 +136,7 @@ function custom_checkout_fields_before_billing_details($order){
 			echo '<h2 class="woocommerce-order-details__title">' .  'Learner Information'  . '</h2>';
 		echo '<table class="woocommerce-table woocommerce-table--order-details">';
 		for ($l = 0 ; $l < $learner_num; $l++){
-				echo '<tr class="woocommerce-table__line-item">' . '<td>' . $order->get_meta( '_learner_first_name'.$l) . '</td>' . '<td>' . $order->get_meta( '_learner_last_name'.$l) . '</td>' . '<td>' . $order->get_meta( '_learner_email'.$l) . '</td>' . '<td>' . $order->get_meta( '_learner_course'.$l) . '</td>' . '</tr>';
+				echo '<tr class="woocommerce-table__line-item">' . '<td style="background-color: white !important;">' . $order->get_meta( '_learner_first_name'.$l) . '</td>' . '<td style="background-color: white !important;">' . $order->get_meta( '_learner_last_name'.$l) . '</td>' . '<td style="background-color: white !important;">' . $order->get_meta( '_learner_email'.$l) . '</td>' . '<td style="background-color: white !important;">' . $order->get_meta( '_learner_course'.$l) . '</td>' . '</tr>';
 		}  
 		echo '</table>';
 		}
@@ -268,4 +269,24 @@ function filter_woocommerce_orders_in_the_table( $query ) {
 
 /* Purchase for someone else button */
 add_theme_support('woocommerce');
+
+/* New Checkout Thankyou Text */
+add_action( 'woocommerce_thankyou', 'coupon_thankyou', 10, 2 ); 
+
+function coupon_thankyou( $order_id ) {
+
+	$order = wc_get_order( $order_id );
+
+	echo "<section class='woocommerce-thankyou-coupon'>
+		<div class='tybox'>
+			<h2 class='woocommerce-thankyou_title'>Thank you for your purchase!</h2>
+			<p>You can find your Enrollment key(s) below your Order Details information. To use your Enrollment Key(s) please copy your needed Enrollment Key(s), navigate to the 
+			<a href='https://www.northeastmaritimeonlinecourses.com/' target='_blank'>myNEMO° Learning Center</a> , select the <b>Have an Enrollment Key</b> tile within your Learning Center and paste in your Enrollment Key.</p>
+		</div>
+	</section>";?><script> document.getElementById('checkoutHeader').style.display="none";</script><style>
+	.woocommerce-order-details, .uael-checkout-review-order-table{
+    	border-top: 0px !important;}
+	</style> <?php
+
+}
 ?>
